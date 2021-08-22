@@ -24,7 +24,12 @@ inline float IsPointInCircle(glm::vec2 c, float r1, glm::vec2 p)
 WallBreaker::WallBreaker(uint16_t width, uint16_t height, std::string title)
   : m_width{ width }, m_height{ height }, m_windowTitle(title), m_window(sf::VideoMode(width, height), title)
 {
-  InitializeKeyMappings();
+}
+
+void WallBreaker::Initialize()
+{
+  constexpr float segmentsThickness = 3.0f;
+  CreateSegmentsField(segmentsThickness, sf::Color::Magenta);
 }
 
 void WallBreaker::Start()
@@ -62,7 +67,7 @@ int WallBreaker::CreateBall(glm::vec2 v, float r, sf::Color color)
 int WallBreaker::CreateSegment(glm::vec2 start_pos, glm::vec2 end_pos, float thickness, sf::Color color)
 {
   size_t i = vecSegments.size();
-  vecSegments.push_back({ start_pos, end_pos, thickness});
+  vecSegments.push_back({ start_pos, end_pos, thickness });
   vecSegmentShapes.push_back(LineSegmentShape(vecSegments[i].p0, vecSegments[i].p1, color, thickness));
   return i;
 }
@@ -101,24 +106,17 @@ void WallBreaker::CreateSegmentsField(float thickness, sf::Color color)
   }
 }
 
-void WallBreaker::Initialize()
-{
-  constexpr float segmentsThickness = 3.0f;
-  CreateSegmentsField(segmentsThickness, sf::Color::Magenta);
-}
-
 void WallBreaker::Run()
 {
-  sf::Clock clock;
+  sf::Clock clock{};
   while (IsRunning())
   {
-    // Handle Timing
-    float frametime = clock.restart().asSeconds();
+    float deltaTime = clock.restart().asSeconds();
     m_window.setTitle(
-      m_windowTitle + " - " + std::string("FPS: " + std::to_string(static_cast<uint16_t>(1.0 / frametime))));
+      m_windowTitle + " - " + std::string("FPS: " + std::to_string(static_cast<uint16_t>(1.0 / deltaTime))));
 
-    ProcessInput(frametime);
-    Update(frametime);
+    ProcessInput(deltaTime);
+    Update(deltaTime);
     Render();
   }
 }
@@ -127,7 +125,6 @@ bool WallBreaker::Update(float deltaTime)
 {
   std::vector<std::pair<sBall *, sBall *>> vecCollidingPairs;
   std::vector<sBall *> vFakeBalls;
-  std::vector<sLineSegment *> vFakeSegments;
   // Update Ball Positions
   for (auto &ball : vecBalls)
   {
@@ -175,14 +172,14 @@ bool WallBreaker::Update(float deltaTime)
       if (fDistance <= (ball.radius + edge.thickness))
       {
         // Collision with a segment itself
-        if (t != 0 && t != 1) 
+        if (t != 0 && t != 1)
         {
           ball.velocity = glm::reflect(ball.velocity, glm::normalize(n));
         }
         else
         {
           // Colision with the start/end of a segment
-          sBall* fakeBall = new sBall;
+          sBall *fakeBall = new sBall;
           fakeBall->position = c;
           fakeBall->radius = edge.thickness;
           fakeBall->mass = ball.mass * 0.8f;
@@ -197,6 +194,8 @@ bool WallBreaker::Update(float deltaTime)
           // Displace Current Ball away from collision
           ball.position -= fOverlap * (ball.position - fakeBall->position) / fDistance;
         }
+
+        vecSegments.erase(vecSegments.begin() + j--);
       }
     }
 
@@ -268,7 +267,11 @@ void WallBreaker::Render()
 {
   m_window.clear();
 
-  // This loops is a bottleneck due to SFML renderer, should be reworked later
+  // This loop is a bottleneck right now because of SFML renderer, definitely should be reworked later
+  //    TODO: Even primitive shapes in SFML contain a lot of useless fields which occupies a lot of memory we are
+  //    wasting a lot of
+  //            time on cache misses due to big size of rendering elements. For out current task we should use custom
+  //            SFML shapes with smaller size (or use own OpenGL renderer) to pack primitive shapes mory tightly)
   for (size_t i = 0; i < vecBalls.size(); ++i)
   {
     glm::vec2 displacedPos{ vecBalls[i].position.x, vecBalls[i].position.y };
@@ -294,12 +297,6 @@ void WallBreaker::Render()
   m_window.display();
 }
 
-void WallBreaker::InitializeKeyMappings()
-{
-  keyMap.insert(KeyPair(sf::Mouse::Left, false));
-  keyMap.insert(KeyPair(sf::Mouse::Right, false));
-}
-
 void WallBreaker::ProcessInput(float deltaTime)
 {
   sf::Event event;
@@ -310,27 +307,23 @@ void WallBreaker::ProcessInput(float deltaTime)
 
     HandleMouseInput(event);
 
+    static std::random_device os_seed;
+    static const auto seed = os_seed();
+    static std::mt19937 randGenerator(seed);
+
+    static std::uniform_int_distribution distributeX(0, (int)m_width);
+    static std::uniform_int_distribution distributeY(m_height / 2, (int)m_height);
+
     if (event.type == sf::Event::KeyPressed)
     {
       if (event.key.code == sf::Keyboard::A)
       {
-        auto randd = rand() % m_height + m_height * 0.75;
-        Fire(glm::vec2(rand() % m_width, 1000), glm::normalize(glm::vec2(-1, 1)), 1500, 0, 0);
-      }
-      if (event.key.code == sf::Keyboard::D)
-      {
-        auto randd = rand() % m_height + m_height * 0.75;
-        Fire(glm::vec2(rand() % m_width, 1000), glm::normalize(glm::vec2(1, 1)), 1500, 0, 0);
-      }
-      if (event.key.code == sf::Keyboard::W)
-      {
-        auto randd = rand() % m_height + m_height * 0.75;
-        Fire(glm::vec2(rand() % m_width, 1000), glm::normalize(glm::vec2(1, -1)), 1500, 0, 0);
-      }
-      if (event.key.code == sf::Keyboard::S)
-      {
-        auto randd = rand() % m_height + m_height * 0.75;
-        Fire(glm::vec2(rand() % m_width, 1000), glm::normalize(glm::vec2(-1, -1)), 1500, 0, 0);
+        for (int i = 0; i < 100; ++i)
+        {
+          auto randx = distributeX(randGenerator);
+          auto randy = distributeY(randGenerator);
+          Fire(glm::vec2(randx, randy), glm::normalize(glm::vec2(i * randx, i * randy)), 1000, 0, 0);
+        }
       }
     }
   }

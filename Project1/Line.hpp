@@ -7,7 +7,6 @@ struct sLineSegment
   glm::vec2 p0;
   glm::vec2 p1;
   float thickness;
-  //int id;
 };
 
 class LineSegmentShape : public sf::Drawable

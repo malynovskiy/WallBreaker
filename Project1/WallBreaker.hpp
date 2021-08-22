@@ -30,15 +30,15 @@ public:
   ~WallBreaker() = default;
 
   void Start();
-  bool Update(float deltaTime);
-  void Render();
-
   inline bool IsRunning() const;
 
   uint16_t GetWidth() const { return m_width; }
   uint16_t GetHeight() const { return m_height; }
 
 private:
+  bool Update(float deltaTime);
+  void Render();
+
   void Initialize();
   void Run();
   void ProcessInput(float deltaTime);
@@ -67,6 +67,7 @@ private:
   sf::RenderWindow m_window;
   sf::View m_view;
 
+  // Preferences
   std::string m_windowTitle;
   uint16_t m_width;
   uint16_t m_height;
