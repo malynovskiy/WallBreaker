@@ -43,7 +43,6 @@ private:
   void Fire(glm::vec2 pos, glm::vec2 dir, float speed, float time, float life_time);
 
 private:
-  static std::map<int, bool> keyMap;
 
   std::vector<Bullet> vecBalls;
   std::vector<sf::CircleShape> vecBallShapes;

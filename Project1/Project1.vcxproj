@@ -143,13 +143,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="WallBreaker.cpp" />
+    <ClCompile Include="WallsManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.hpp" />
+    <ClInclude Include="BulletManager.hpp" />
     <ClInclude Include="Segment.hpp" />
     <ClInclude Include="WallBreaker.hpp" />
+    <ClInclude Include="WallsManager.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

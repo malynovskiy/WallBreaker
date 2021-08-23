@@ -4,9 +4,6 @@
 #include <map>
 #include <random>
 
-using KeyPair = std::pair<int, bool>;
-std::map<int, bool> WallBreaker::keyMap;
-
 namespace
 {
 inline float DoCirclesOverlap(glm::vec2 v1, float r1, glm::vec2 v2, float r2)
