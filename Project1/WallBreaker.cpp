@@ -46,7 +46,7 @@ void WallBreaker::Fire(glm::vec2 pos, glm::vec2 dir, float speed, float time, fl
 
 int WallBreaker::CreateBall(glm::vec2 v, float r, sf::Color color)
 {
-  sBall b{};
+  Bullet b{};
   b.position = v;
   b.radius = r;
   b.mass = r * 10.0f;
@@ -123,8 +123,8 @@ void WallBreaker::Run()
 
 bool WallBreaker::Update(float deltaTime)
 {
-  std::vector<std::pair<sBall *, sBall *>> vecCollidingPairs;
-  std::vector<sBall *> vFakeBalls;
+  std::vector<std::pair<Bullet *, Bullet *>> vecCollidingPairs;
+  std::vector<Bullet *> vFakeBullets;
   // Update Ball Positions
   for (auto &ball : vecBalls)
   {
@@ -157,7 +157,7 @@ bool WallBreaker::Update(float deltaTime)
   {
     for (size_t j = 0; j < vecSegments.size(); ++j)
     {
-      sLineSegment &edge = vecSegments[j];
+      Segment &edge = vecSegments[j];
       glm::vec2 v0 = edge.p1 - edge.p0;
       glm::vec2 v1 = ball.position - edge.p0;
 
@@ -179,20 +179,20 @@ bool WallBreaker::Update(float deltaTime)
         else
         {
           // Colision with the start/end of a segment
-          sBall *fakeBall = new sBall;
-          fakeBall->position = c;
-          fakeBall->radius = edge.thickness;
-          fakeBall->mass = ball.mass * 0.8f;
-          fakeBall->velocity = -ball.velocity;
+          Bullet *fakeBullet = new Bullet;
+          fakeBullet->position = c;
+          fakeBullet->radius = edge.thickness;
+          fakeBullet->mass = ball.mass * 0.8f;
+          fakeBullet->velocity = -ball.velocity;
 
           // Add collision to vector of collisions for dynamic resolution
-          vecCollidingPairs.push_back({ &ball, fakeBall });
-          vFakeBalls.push_back(fakeBall);
+          vecCollidingPairs.push_back({ &ball, fakeBullet });
+          vFakeBullets.push_back(fakeBullet);
           // Calculate displacement required
-          float fOverlap = 1.0f * (fDistance - ball.radius - fakeBall->radius);
+          float fOverlap = 1.0f * (fDistance - ball.radius - fakeBullet->radius);
 
           // Displace Current Ball away from collision
-          ball.position -= fOverlap * (ball.position - fakeBall->position) / fDistance;
+          ball.position -= fOverlap * (ball.position - fakeBullet->position) / fDistance;
         }
 
         vecSegments.erase(vecSegments.begin() + j--);
@@ -227,8 +227,8 @@ bool WallBreaker::Update(float deltaTime)
   // Now work out dynamic collisions
   for (auto c : vecCollidingPairs)
   {
-    sBall *b1 = c.first;
-    sBall *b2 = c.second;
+    Bullet *b1 = c.first;
+    Bullet *b2 = c.second;
 
     // Distance between balls
     float fDistance = glm::distance(b1->position, b2->position);
@@ -256,9 +256,9 @@ bool WallBreaker::Update(float deltaTime)
     b2->velocity = t * dpTan2 + n * m2;
   }
 
-  for (auto &ball : vFakeBalls)
+  for (auto &ball : vFakeBullets)
     delete ball;
-  vFakeBalls.clear();
+  vFakeBullets.clear();
 
   return true;
 }
@@ -336,11 +336,11 @@ void WallBreaker::HandleMouseInput(sf::Event &e)
     pSelectedBall = nullptr;
     const auto mousePos = sf::Mouse::getPosition(m_window);
     std::cout << "x: " << mousePos.x << "\ty:" << mousePos.y << '\n';
-    for (auto &ball : vecBalls)
+    for (auto &bullet : vecBalls)
     {
-      if (IsPointInCircle(ball.position, ball.radius, { mousePos.x, mousePos.y }))
+      if (IsPointInCircle(bullet.position, bullet.radius, { mousePos.x, mousePos.y }))
       {
-        pSelectedBall = &ball;
+        pSelectedBall = &bullet;
         break;
       }
     }

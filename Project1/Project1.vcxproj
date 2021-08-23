@@ -147,7 +147,8 @@
     <ClCompile Include="WallBreaker.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Line.hpp" />
+    <ClInclude Include="Bullet.hpp" />
+    <ClInclude Include="Segment.hpp" />
     <ClInclude Include="WallBreaker.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

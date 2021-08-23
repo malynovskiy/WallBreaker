@@ -26,7 +26,12 @@
     <ClInclude Include="WallBreaker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Line.hpp">
+    <ClInclude Include="Segment.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

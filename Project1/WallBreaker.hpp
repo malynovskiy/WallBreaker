@@ -2,7 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include <glm/glm.hpp>
 
-#include "Line.hpp"
+#include "Segment.hpp"
+#include "Bullet.hpp"
 
 #include <string>
 #include <map>
@@ -10,17 +11,6 @@
 // settings
 inline constexpr uint16_t DefaultWindowWidth = 1920;
 inline constexpr uint16_t DefaultWindowHeight = 1080;
-
-struct sBall
-{
-  glm::vec2 position;
-  glm::vec2 velocity;
-  glm::vec2 acceleration;
-  float radius;
-  float mass;
-
-  int id;
-};
 
 class WallBreaker
 {
@@ -55,14 +45,13 @@ private:
 private:
   static std::map<int, bool> keyMap;
 
-private:
-  std::vector<sBall> vecBalls;
+  std::vector<Bullet> vecBalls;
   std::vector<sf::CircleShape> vecBallShapes;
-  sBall *pSelectedBall = nullptr;
+  Bullet *pSelectedBall = nullptr;
 
-  std::vector<sLineSegment> vecSegments;
+  std::vector<Segment> vecSegments;
   std::vector<LineSegmentShape> vecSegmentShapes;
-  sLineSegment *pSelectedSegment = nullptr;
+  Segment *pSelectedSegment = nullptr;
 
   sf::RenderWindow m_window;
   sf::View m_view;
