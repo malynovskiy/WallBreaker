@@ -8,5 +8,6 @@ struct Bullet
   glm::vec2 acceleration;
   float radius;
   float mass;
-  int id;
+  float spawntime;
+  float lifetime;
 };

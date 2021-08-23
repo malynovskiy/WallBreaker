@@ -1,4 +1,5 @@
 #include "WallBreaker.hpp"
+
 #include <iostream>
 #include <chrono>
 #include <map>
@@ -33,32 +34,6 @@ void WallBreaker::Start()
 {
   Initialize();
   Run();
-}
-
-void WallBreaker::Fire(glm::vec2 pos, glm::vec2 dir, float speed, float time, float life_time)
-{
-  int id = CreateBall(pos, 5);
-  vecBalls[id].velocity = dir * speed;
-}
-
-int WallBreaker::CreateBall(glm::vec2 v, float r, sf::Color color)
-{
-  Bullet b{};
-  b.position = v;
-  b.radius = r;
-  b.mass = r * 10.0f;
-
-  b.id = vecBalls.size();
-  vecBalls.emplace_back(b);
-
-  sf::CircleShape shape{};
-  shape.setRadius(r);
-  shape.setFillColor(color);
-  shape.setOutlineColor(sf::Color::White);
-  shape.setOutlineThickness(3);
-  vecBallShapes.emplace_back(shape);
-
-  return b.id;
 }
 
 int WallBreaker::CreateSegment(glm::vec2 start_pos, glm::vec2 end_pos, float thickness, sf::Color color)
@@ -283,14 +258,6 @@ void WallBreaker::Render()
     m_window.draw(vecSegmentShapes[i]);
   }
 
-  if (pSelectedBall != nullptr && sf::Mouse::isButtonPressed(sf::Mouse::Right))
-  {
-    sf::Vector2f ballPos = { pSelectedBall->position.x, pSelectedBall->position.y };
-    auto mousePos = sf::Mouse::getPosition(m_window);
-    LineSegmentShape line(ballPos, sf::Vector2f(mousePos.x, mousePos.y), sf::Color::Cyan);
-    m_window.draw(line);
-  }
-
   m_window.display();
 }
 
@@ -319,56 +286,14 @@ void WallBreaker::ProcessInput(float deltaTime)
         {
           auto randx = distributeX(randGenerator);
           auto randy = distributeY(randGenerator);
-          Fire(glm::vec2(randx, randy), glm::normalize(glm::vec2(i * randx, i * randy)), 1000, 0, 0);
+          // Fire(glm::vec2(randx, randy), glm::normalize(glm::vec2(i * randx, i * randy)), 1000, 0, 0);
+          glm::vec2 dir = glm::vec2(i * randx, i * randy);
+          if (i == 0)
+            dir = { 1.0f, 1.0f };
+          m_bulletManager.Fire(
+            glm::vec2(randx, randy), glm::normalize(dir), 1000, m_clock.getElapsedTime().asSeconds(), rand() % 5 + 2);
         }
       }
-    }
-  }
-}
-
-void WallBreaker::HandleMouseInput(sf::Event &e)
-{
-  if (e.type == sf::Event::MouseButtonPressed)
-  {
-    pSelectedBall = nullptr;
-    const auto mousePos = sf::Mouse::getPosition(m_window);
-    std::cout << "x: " << mousePos.x << "\ty:" << mousePos.y << '\n';
-    for (auto &bullet : vecBalls)
-    {
-      if (IsPointInCircle(bullet.position, bullet.radius, { mousePos.x, mousePos.y }))
-      {
-        pSelectedBall = &bullet;
-        break;
-      }
-    }
-  }
-
-  if (e.type == sf::Event::MouseMoved)
-  {
-    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-    {
-      if (pSelectedBall != nullptr)
-      {
-        const auto mousePos = sf::Mouse::getPosition(m_window);
-        pSelectedBall->position = { mousePos.x, mousePos.y };
-      }
-    }
-  }
-
-  if (e.type == sf::Event::MouseButtonReleased)
-  {
-    if (e.mouseButton.button == sf::Mouse::Left)
-      pSelectedBall = nullptr;
-    else
-    {
-      if (pSelectedBall != nullptr)
-      {
-        // Apply velocity
-        const auto mousePos = sf::Mouse::getPosition(m_window);
-        pSelectedBall->velocity = 5.0f * (pSelectedBall->position - glm::vec2(mousePos.x, mousePos.y));
-      }
-
-      pSelectedBall = nullptr;
     }
   }
 }

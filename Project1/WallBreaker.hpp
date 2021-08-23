@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "Segment.hpp"
-#include "Bullet.hpp"
+#include "BulletManager.hpp"
 
 #include <string>
 #include <map>
@@ -11,12 +11,13 @@
 // settings
 inline constexpr uint16_t DefaultWindowWidth = 1920;
 inline constexpr uint16_t DefaultWindowHeight = 1080;
+inline constexpr auto DefaultTitle = "WallBreaker";
 
 class WallBreaker
 {
 public:
   WallBreaker(
-    uint16_t width = DefaultWindowWidth, uint16_t height = DefaultWindowHeight, std::string title = "WallBreaker");
+    uint16_t width = DefaultWindowWidth, uint16_t height = DefaultWindowHeight, std::string title = DefaultTitle);
   ~WallBreaker() = default;
 
   void Start();
