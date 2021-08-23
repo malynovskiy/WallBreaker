@@ -7,6 +7,7 @@
 
 #include <string>
 #include <map>
+#include <thread>
 
 // settings
 inline constexpr uint16_t DefaultWindowWidth = 1920;
@@ -27,7 +28,7 @@ public:
   uint16_t GetHeight() const { return m_height; }
 
 private:
-  bool Update(float deltaTime);
+  void Update(float time);
   void Render();
 
   void Initialize();
@@ -36,18 +37,12 @@ private:
 
   void InitializeKeyMappings();
 
-  void HandleMouseInput(sf::Event &e);
-
-  int CreateBall(glm::vec2 v, float r = 3.0f, sf::Color color = sf::Color::Black);
   int CreateSegment(glm::vec2 start_pos, glm::vec2 end_pos, float thickness = 3.0f, sf::Color color = sf::Color::White);
   void CreateSegmentsField(float thickness = 3.0f, sf::Color color = sf::Color::White);
-  void Fire(glm::vec2 pos, glm::vec2 dir, float speed, float time, float life_time);
 
 private:
-
-  std::vector<Bullet> vecBalls;
-  std::vector<sf::CircleShape> vecBallShapes;
-  Bullet *pSelectedBall = nullptr;
+  std::vector<std::thread> m_workThreads;
+  BulletManager m_bulletManager;
 
   std::vector<Segment> vecSegments;
   std::vector<LineSegmentShape> vecSegmentShapes;
@@ -55,6 +50,7 @@ private:
 
   sf::RenderWindow m_window;
   sf::View m_view;
+  sf::Clock m_clock;
 
   // Preferences
   std::string m_windowTitle;
