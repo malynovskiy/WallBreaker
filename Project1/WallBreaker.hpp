@@ -14,6 +14,8 @@ inline constexpr uint16_t DefaultWindowWidth = 1920;
 inline constexpr uint16_t DefaultWindowHeight = 1080;
 inline constexpr auto DefaultTitle = "WallBreaker";
 
+constexpr uint16_t DefaultBulletSpeed = 100;
+
 class WallBreaker
 {
 public:

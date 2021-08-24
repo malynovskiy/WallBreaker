@@ -31,8 +31,8 @@ int BulletManager::CreateBullet(glm::vec2 pos, float radius, float time, float l
   sf::CircleShape shape{};
   shape.setRadius(radius);
   shape.setFillColor(color);
-  shape.setOutlineColor(sf::Color::Yellow);
-  shape.setOutlineThickness(1);
+  //shape.setOutlineColor(sf::Color::Yellow);
+  //shape.setOutlineThickness(1);
   m_bulletShapes.emplace_back(shape);
 
   return m_bullets.size() - 1;
@@ -42,7 +42,7 @@ void BulletManager::Fire(glm::vec2 pos, glm::vec2 dir, float speed, float time, 
 {
   std::lock_guard lock(m_bulletsMutex);
 
-  const int i = CreateBullet(pos, DefaultBulletRadius, time, lifetime, sf::Color::White);
+  const int i = CreateBullet(pos, DefaultBulletRadius, time, lifetime, sf::Color::Yellow);
   m_bullets[i].velocity = dir * speed;
 }
 
