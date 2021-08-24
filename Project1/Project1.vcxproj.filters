@@ -24,9 +24,6 @@
     <ClCompile Include="BulletManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WallsManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="WallBreaker.hpp">
@@ -41,7 +38,7 @@
     <ClInclude Include="BulletManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WallsManager.hpp">
+    <ClInclude Include="ThreadManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
