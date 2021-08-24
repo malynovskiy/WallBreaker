@@ -35,6 +35,7 @@ private:
 
 private:
   std::vector<std::thread> m_workThreads;
+  std::atomic_bool m_workThreadsRunning;
   BulletManager m_bulletManager;
 
   // TODO: Renderer should be separated into another context with some interface
