@@ -29,6 +29,8 @@ public:
   void SetViewportWidth(float width) { m_viewportWidth = width; }
   void SetViewportHeight(float height) { m_viewportHeight = height; }
 
+  void ToggleProcessBulletsCollision() { m_processBulletsCollision = !m_processBulletsCollision; }
+
   size_t GetNumberOfBullets() { return m_bullets.size(); }
   size_t GetNumberOfWalls() { return m_walls.size(); }
 
@@ -72,6 +74,8 @@ private:
 
   float m_viewportWidth;
   float m_viewportHeight;
+
+  bool m_processBulletsCollision = true;
 
   float m_lastTimeStamp = 0.0f;
   sf::RenderWindow *m_window;

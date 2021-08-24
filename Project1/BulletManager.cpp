@@ -132,25 +132,28 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
   // Bullets collision handling
   for (auto &bullet : m_bullets)
   {
-    // for (auto &targetBullet : m_bullets)
-    // {
-    //   if (&bullet == &targetBullet)
-    //     continue;
+    if(m_processBulletsCollision)
+    {
+      for (auto &targetBullet : m_bullets)
+      {
+        if (&bullet == &targetBullet)
+          continue;
 
-    //   if (DoCirclesOverlap(bullet.position, bullet.radius, targetBullet.position, targetBullet.radius))
-    //   {
-    //     // Collision has occured
-    //     collidingBullets.push_back({ &bullet, &targetBullet });
-    //     // Distance between bullet centers
-    //     float fDistance = glm::distance(bullet.position, targetBullet.position);
-    //     // Calculate displacement required
-    //     float fOverlap = 0.5f * (fDistance - bullet.radius - targetBullet.radius);
-    //     // Displace Current bullet away from collision
-    //     bullet.position -= fOverlap * (bullet.position - targetBullet.position) / fDistance;
-    //     // Displace Target bullet away from collision
-    //     targetBullet.position += fOverlap * (bullet.position - targetBullet.position) / fDistance;
-    //   }
-    // }
+        if (DoCirclesOverlap(bullet.position, bullet.radius, targetBullet.position, targetBullet.radius))
+        {
+          // Collision has occured
+          collidingBullets.push_back({ &bullet, &targetBullet });
+          // Distance between bullet centers
+          float fDistance = glm::distance(bullet.position, targetBullet.position);
+          // Calculate displacement required
+          float fOverlap = 0.5f * (fDistance - bullet.radius - targetBullet.radius);
+          // Displace Current bullet away from collision
+          bullet.position -= fOverlap * (bullet.position - targetBullet.position) / fDistance;
+          // Displace Target bullet away from collision
+          targetBullet.position += fOverlap * (bullet.position - targetBullet.position) / fDistance;
+        }
+      }
+    }
 
     for (size_t j = 0; j < m_walls.size(); ++j)
     {

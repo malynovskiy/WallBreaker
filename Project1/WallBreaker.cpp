@@ -96,19 +96,9 @@ void WallBreaker::ProcessInput()
 
     if (event.type == sf::Event::KeyPressed)
     {
-      if (event.key.code == sf::Keyboard::Q)
+      if (event.key.code == sf::Keyboard::F1)
       {
-        for (int i = 0; i < 100; ++i)
-        {
-          const auto randX = distributeX(randGenerator);
-          const auto randY = distributeY(randGenerator);
-          const glm::vec2 pos = glm::vec2(randX, randY);
-
-          int x = randX % 2 == 0 ? i : -i;
-          int y = randY % 3 == 0 ? -i : i;
-          const glm::vec2 dir = glm::vec2(pos.x * x, pos.y * y);
-          m_bulletManager.Fire(pos, glm::normalize(dir), 100, m_clock.getElapsedTime().asSeconds(), rand() % 7 + 3);
-        }
+        m_bulletManager.ToggleProcessBulletsCollision();
       }
 
       if (event.key.code == sf::Keyboard::W)
