@@ -126,21 +126,11 @@ void WallBreaker::ProcessInput()
         // 32 x 32 = 1024 walls
         m_bulletManager.GenerateNewWalls(32);
       }
-      if (event.key.code == sf::Keyboard::U)
-      {
-        for (int i = 0; i < 1000; ++i)
-        {
-          const auto randX = distributeX(randGenerator);
-          const auto randY = distributeY(randGenerator);
-          const glm::vec2 pos = glm::vec2(randX, randY);
 
-          int x = randX % 2 == 0 ? i : -i;
-          int y = randY % 3 == 0 ? -i : i;
-          const glm::vec2 dir = glm::vec2(pos.x * x, pos.y * y);
-          m_bulletManager.Fire(pos, glm::normalize(dir), 200, m_clock.getElapsedTime().asSeconds(), rand() % 7 + 3);
-        }
+      if (event.key.code == sf::Keyboard::D)
+      {
+        m_bulletManager.RemoveAllWalls();
       }
-      
     }
   }
 }

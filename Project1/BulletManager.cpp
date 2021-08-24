@@ -234,43 +234,6 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
     delete b;
 }
 
-void BulletManager::CreateWalls(float thickness, sf::Color color)
-{
-  if(!m_walls.empty())
-    return;
-
-  constexpr uint16_t SegmentGridCols = 15;
-  constexpr uint16_t SegmentGridRows = 10;
-
-  const float rectWidth = m_viewportWidth / SegmentGridCols;
-  const float rectHeight = m_viewportHeight / 2 / SegmentGridRows;
-
-  std::random_device os_seed;
-  const auto seed = os_seed();
-  std::mt19937 randGenerator(seed);
-
-  for (size_t i = 0; i < SegmentGridRows; ++i)
-  {
-    for (size_t j = 0; j < SegmentGridCols; ++j)
-    {
-      glm::vec2 currRectOrigin(j * rectWidth, i * rectHeight);
-
-      const int minX = currRectOrigin.x;
-      const int maxX = currRectOrigin.x + rectWidth;
-      const int minY = currRectOrigin.y;
-      const int maxY = currRectOrigin.y + rectHeight;
-
-      std::uniform_int_distribution distributeX(minX, maxX);
-      std::uniform_int_distribution distributeY(minY, maxY);
-
-      const glm::vec2 startPoint(distributeX(randGenerator), distributeY(randGenerator));
-      const glm::vec2 endPoint(distributeX(randGenerator), distributeY(randGenerator));
-
-      CreateWall(startPoint, endPoint, thickness, color);
-    }
-  }
-}
-
 void BulletManager::CreateWalls(unsigned int gridRatio, float thickness, sf::Color color)
 {
   if (!m_walls.empty())
@@ -306,4 +269,19 @@ void BulletManager::CreateWalls(unsigned int gridRatio, float thickness, sf::Col
       CreateWall(startPoint, endPoint, thickness, color);
     }
   }
+}
+
+void BulletManager::GenerateNewWalls(unsigned int ratio)
+{
+  {
+    constexpr float wallsThickness = 2.0f;
+    const sf::Color wallsColor = sf::Color::Cyan;
+    CreateWalls(ratio, wallsThickness, wallsColor);
+  }
+}
+
+void BulletManager::RemoveAllWalls()
+{
+  m_walls.clear();
+  m_wallShapes.clear();
 }

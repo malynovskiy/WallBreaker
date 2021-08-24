@@ -34,19 +34,8 @@ public:
   size_t GetNumberOfBullets() { return m_bullets.size(); }
   size_t GetNumberOfWalls() { return m_walls.size(); }
 
-  void GenerateNewWalls()
-  {
-    constexpr float wallsThickness = 2.0f;
-    const sf::Color wallsColor = sf::Color::Magenta;
-    CreateWalls(wallsThickness, wallsColor);
-  }
-
-  void GenerateNewWalls(unsigned int ratio)
-  {
-    constexpr float wallsThickness = 2.0f;
-    const sf::Color wallsColor = sf::Color::Cyan;
-    CreateWalls(ratio, wallsThickness, wallsColor);
-  }
+  void GenerateNewWalls(unsigned int ratio);
+  void RemoveAllWalls();
 
 private:
   int CreateBullet(glm::vec2 pos, float radius, float time, float lifetime, sf::Color color = DefaultBulletColor);
@@ -61,7 +50,6 @@ private:
     m_wallShapes.push_back(SegmentShape(m_walls[i].p0, m_walls[i].p1, color, thickness));
     return i;
   }
-  void CreateWalls(float thickness, sf::Color color);
   void CreateWalls(unsigned int gridRatio, float thickness, sf::Color color);
 
 private:
