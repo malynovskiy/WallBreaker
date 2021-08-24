@@ -24,9 +24,11 @@ void WallBreaker::Run()
   // Initial test state with 1024 walls on a scene
   m_bulletManager.GenerateNewWalls(32);
 
+  // Initial test proc for firing bullets each 20 milliseconds concurrently
   auto fireProcWithInterval =
     [&randGenerator, &distributeX, &distributeY, &bulletManager = m_bulletManager, &clock = m_clock]() {
-      std::chrono::duration<float> msToSleep{ 0.00 };
+      constexpr float bulletFireInterval = 0.02f;
+      std::chrono::duration<float> msToSleep{ bulletFireInterval };
       std::this_thread::sleep_for(msToSleep);
 
       const auto randX = distributeX(randGenerator);
