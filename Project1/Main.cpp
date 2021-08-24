@@ -3,7 +3,7 @@
 int main()
 {
   WallBreaker wallBreaker;
-  wallBreaker.Start();
+  wallBreaker.Run();
 
   return 0;
 }

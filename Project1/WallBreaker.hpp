@@ -21,7 +21,7 @@ public:
     uint16_t width = DefaultWindowWidth, uint16_t height = DefaultWindowHeight, std::string title = DefaultTitle);
   ~WallBreaker() = default;
 
-  void Start();
+  void Run();
   inline bool IsRunning() const;
 
   uint16_t GetWidth() const { return m_width; }
@@ -29,25 +29,13 @@ public:
 
 private:
   void Update(float time);
-  void Render();
-
-  void Initialize();
-  void Run();
-  void ProcessInput(float deltaTime);
-
-  void InitializeKeyMappings();
-
-  int CreateSegment(glm::vec2 start_pos, glm::vec2 end_pos, float thickness = 3.0f, sf::Color color = sf::Color::White);
-  void CreateSegmentsField(float thickness = 3.0f, sf::Color color = sf::Color::White);
+  void ProcessInput();
 
 private:
   std::vector<std::thread> m_workThreads;
   BulletManager m_bulletManager;
 
-  std::vector<Segment> vecSegments;
-  std::vector<LineSegmentShape> vecSegmentShapes;
-  Segment *pSelectedSegment = nullptr;
-
+  // TODO: Renderer should be separated into another context with some interface
   sf::RenderWindow m_window;
   sf::View m_view;
   sf::Clock m_clock;

@@ -10,12 +10,12 @@ struct Segment
 };
 
 constexpr unsigned int SegmentVerticesNumber = 4;
-constexpr float DefaultSegmentShapeThickness = 5.0f;
+constexpr float DefaultSegmentShapeThickness = 3.0f;
 
-class LineSegmentShape : public sf::Drawable
+class SegmentShape : public sf::Drawable
 {
 public:
-  LineSegmentShape(const sf::Vector2f &p0,
+  SegmentShape(const sf::Vector2f &p0,
     const sf::Vector2f &p1,
     sf::Color c = sf::Color::White,
     float t = DefaultSegmentShapeThickness)
@@ -24,9 +24,9 @@ public:
     setPosition(p0, p1);
   }
 
-  LineSegmentShape(
+  SegmentShape(
     const glm::vec2 &p0, const glm::vec2 &p1, sf::Color c = sf::Color::White, float t = DefaultSegmentShapeThickness)
-    : LineSegmentShape(sf::Vector2f(p0.x, p0.y), sf::Vector2f(p1.x, p1.y), c, t)
+    : SegmentShape(sf::Vector2f(p0.x, p0.y), sf::Vector2f(p1.x, p1.y), c, t)
   {
   }
 
