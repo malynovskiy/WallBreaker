@@ -1,5 +1,6 @@
 #include "BulletManager.hpp"
 #include "WallBreaker.hpp"
+#include "Math.hpp"
 
 #include <random>
 
@@ -8,12 +9,12 @@ namespace
 inline float DoCirclesOverlap(glm::vec2 v1, float r1, glm::vec2 v2, float r2)
 {
   const glm::vec2 v = v1 - v2;
-  return fabs(glm::dot(v, v)) <= (r1 + r2) * (r1 + r2);
+  return fabs(Math::dot(v, v)) <= (r1 + r2) * (r1 + r2);
 }
 inline float IsPointInCircle(glm::vec2 c, float r1, glm::vec2 p)
 {
   const glm::vec2 v = c - p;
-  return fabs(glm::dot(v, v)) < (r1 * r1);
+  return fabs(Math::dot(v, v)) < (r1 * r1);
 }
 }// namespace
 
@@ -120,7 +121,7 @@ inline void BulletManager::MoveBullet(Bullet &bullet, float deltaTime)
     bullet.position.y -= m_viewportHeight;
 
   // Clamp velocity near zero
-  if (fabs(glm::dot(bullet.velocity, bullet.velocity)) < 0.01f)
+  if (fabs(Math::dot(bullet.velocity, bullet.velocity)) < 0.01f)
     bullet.velocity = { 0.0f, 0.0f };
 }
 
@@ -144,7 +145,7 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
           // Collision has occured
           collidingBullets.push_back({ &bullet, &targetBullet });
           // Distance between bullet centers
-          float fDistance = glm::distance(bullet.position, targetBullet.position);
+          float fDistance = Math::distance(bullet.position, targetBullet.position);
           // Calculate displacement required
           float fOverlap = 0.5f * (fDistance - bullet.radius - targetBullet.radius);
           // Displace Current bullet away from collision
@@ -161,14 +162,14 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
       const glm::vec2 v0 = edge.p1 - edge.p0;
       const glm::vec2 v1 = bullet.position - edge.p0;
 
-      const float len = glm::dot(v0, v0);
+      const float len = Math::dot(v0, v0);
       // Clamping distance between 0 and 1 to handle only segment collion, not the infinite line
-      const float t = std::max(0.0f, std::min(len, glm::dot(v0, v1))) / len;
+      const float t = std::max(0.0f, std::min(len, Math::dot(v0, v1))) / len;
 
       glm::vec2 c = edge.p0 + v0 * t;
 
       glm::vec2 n = bullet.position - c;
-      float fDistance = glm::length(n);
+      float fDistance = Math::length(n);
 
       if (fDistance <= (bullet.radius + edge.thickness))
       {
@@ -192,7 +193,7 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
         else
         {
           // Collision with the "flat" part of a segment
-          bullet.velocity = glm::reflect(bullet.velocity, glm::normalize(n));
+          bullet.velocity = Math::reflect(bullet.velocity, Math::normalize(n));
         }
 
         m_walls.erase(m_walls.begin() + j);
@@ -209,17 +210,17 @@ void BulletManager::ProcessBulletsCollision(float deltaTime)
     Bullet *b1 = c.first;
     Bullet *b2 = c.second;
 
-    const float fDistance = glm::distance(b1->position, b2->position);
+    const float fDistance = Math::distance(b1->position, b2->position);
     glm::vec2 n = (b2->position - b1->position) / fDistance;
 
     glm::vec2 tangent = { -n.y, n.x };
     // Dot Product Tangent
-    float dpTan1 = glm::dot(b1->velocity, tangent);
-    float dpTan2 = glm::dot(b2->velocity, tangent);
+    float dpTan1 = Math::dot(b1->velocity, tangent);
+    float dpTan2 = Math::dot(b2->velocity, tangent);
 
     // Dot Product Normal
-    float dpNorm1 = glm::dot(b1->velocity, n);
-    float dpNorm2 = glm::dot(b2->velocity, n);
+    float dpNorm1 = Math::dot(b1->velocity, n);
+    float dpNorm2 = Math::dot(b2->velocity, n);
 
     // Conservation of momentum in 1D
     float m1 = (dpNorm1 * (b1->mass - b2->mass) + 2.0f * b2->mass * dpNorm2) / (b1->mass + b2->mass);

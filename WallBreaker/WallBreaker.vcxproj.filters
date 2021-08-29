@@ -18,27 +18,30 @@
     <ClCompile Include="Main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="WallBreaker.cpp">
+    <ClCompile Include="source\WallBreaker.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BulletManager.cpp">
+    <ClCompile Include="source\BulletManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="WallBreaker.hpp">
+    <ClInclude Include="headers\WallBreaker.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Segment.hpp">
+    <ClInclude Include="headers\Segment.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.hpp">
+    <ClInclude Include="headers\Bullet.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="BulletManager.hpp">
+    <ClInclude Include="headers\BulletManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ThreadManager.hpp">
+    <ClInclude Include="headers\ThreadManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\Math.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
