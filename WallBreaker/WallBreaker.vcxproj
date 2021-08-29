@@ -122,6 +122,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\include; $(ProjectDir)/headers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -137,6 +138,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)ThirdParty\include; $(ProjectDir)/headers</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -146,16 +148,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="source\BulletManager.cpp" />
     <ClCompile Include="Main.cpp" />
-    <ClCompile Include="WallBreaker.cpp" />
+    <ClCompile Include="source\WallBreaker.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.hpp" />
-    <ClInclude Include="BulletManager.hpp" />
-    <ClInclude Include="Segment.hpp" />
-    <ClInclude Include="ThreadManager.hpp" />
-    <ClInclude Include="WallBreaker.hpp" />
+    <ClInclude Include="headers\Bullet.hpp" />
+    <ClInclude Include="headers\BulletManager.hpp" />
+    <ClInclude Include="headers\Math.hpp" />
+    <ClInclude Include="headers\Segment.hpp" />
+    <ClInclude Include="headers\ThreadManager.hpp" />
+    <ClInclude Include="headers\WallBreaker.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

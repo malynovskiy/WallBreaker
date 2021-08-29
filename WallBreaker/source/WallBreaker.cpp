@@ -1,4 +1,5 @@
 #include "WallBreaker.hpp"
+#include "Math.hpp"
 
 #include <iostream>
 #include <chrono>
@@ -41,7 +42,7 @@ void WallBreaker::Run()
       const glm::vec2 dir = glm::vec2(pos.x * x, pos.y * y);
 
       bulletManager.Fire(
-        pos, glm::normalize(dir), DefaultBulletSpeed, clock.getElapsedTime().asSeconds(), rand() % 6 + 1);
+        pos, Math::normalize(dir), DefaultBulletSpeed, clock.getElapsedTime().asSeconds(), rand() % 6 + 1);
     };
 
   const size_t threadsCount = std::thread::hardware_concurrency() - 1;
@@ -112,7 +113,7 @@ void WallBreaker::ProcessInput()
         const glm::vec2 dir = glm::vec2(pos.x * x, pos.y * y);
 
         bulletManager.Fire(
-          pos, glm::normalize(dir), DefaultBulletSpeed, clock.getElapsedTime().asSeconds(), rand() % 7 + 3);
+          pos, Math::normalize(dir), DefaultBulletSpeed, clock.getElapsedTime().asSeconds(), rand() % 7 + 3);
       }
     };
 
